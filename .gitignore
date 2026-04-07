@@ -1,0 +1,11 @@
+# VS Code / Cursor
+.vscode/
+!.vscode/settings.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# SQL Server backups
+*.bak
+*.trn
