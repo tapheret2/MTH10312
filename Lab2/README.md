@@ -75,8 +75,8 @@ Nộp lên **Sakai** các file sau:
 
 | Câu | Trạng thái |
 |-----|-----------|
-| Câu 1 — Schema csdl_taxi | ⬜ Chưa làm |
-| Câu 1 — Schema csdl_doithicong | ⬜ Chưa làm |
+| Câu 1 — Schema csdl_taxi | ✅ Xong |
+| Câu 1 — Schema csdl_doithicong | ✅ Xong |
 | Câu 2 — Insert data csdl_taxi | ⬜ Chưa làm |
 | Câu 2 — Insert data csdl_doithicong | ⬜ Chưa làm |
 | Câu 3 — Cau3_Lab2_csdl_taxi.sql | ⬜ Chưa làm |
