@@ -5,7 +5,12 @@ FROM TUYENBUYT AS tb
 INNER JOIN DVVANHANH AS dv
     ON tb.MaDV=dv.MaDV
 --2. Với mỗi trạm dừng ở đường Hàm Nghi, Quận 1, cho biết mã số trạm, tên trạm và mã số các tuyến xe buýt có lộ trình qua trạm đó. (Lưu ý dữ liệu sử dụng tiếng Việt không dấu).
-
+USE csdl_xebuyt;
+SELECT td.MaTD,td.TenTram,lt.MaTB
+FROM TRAMDUNG as td
+INNER JOIN LOTRINH as lt
+    ON td.MaTD = lt.MaTD
+WHERE td.DiaDiem LIKE '%HAM NGHI, QUAN 1%'
 --3. Cho biết mã số trạm, tên trạm, loại của các trạm dừng ở Quận 12 thuộc lộ trình của các tuyến xe buýt số 3. (Lưu ý dữ liệu sử dụng tiếng Việt không dấu).
 
 --4. Cho biết mã số trạm, tên trạm, loại của các trạm dừng khởi hành của các tuyến xe buýt.
