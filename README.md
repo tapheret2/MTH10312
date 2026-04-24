@@ -63,12 +63,15 @@
 
 ```
 Database/
-└── Lab2/          # Lab 2 – SQL: Định nghĩa và cập nhật dữ liệu
-    ├── cau1.sql                        # Câu 1: Tạo lược đồ csdl_taxi
-    ├── cau1_doithicong.sql             # Câu 1: Tạo lược đồ csdl_doithicong
-    ├── Cau3_Lab2_csdl_taxi.sql         # Câu 3: Script tổng hợp csdl_taxi
-    ├── Cau3_Lab2_csdl_doithicong.sql   # Câu 3: Script tổng hợp csdl_doithicong
-    └── Cau4_Lab2.sql                   # Câu 4: Cập nhật dữ liệu
+├── Lab2/          # Lab 2 – SQL: Định nghĩa và cập nhật dữ liệu
+│   ├── cau1.sql                        # Câu 1: Tạo lược đồ csdl_taxi
+│   ├── cau1_doithicong.sql             # Câu 1: Tạo lược đồ csdl_doithicong
+│   ├── Cau3_Lab2_csdl_taxi.sql         # Câu 3: Script tổng hợp csdl_taxi
+│   ├── Cau3_Lab2_csdl_doithicong.sql   # Câu 3: Script tổng hợp csdl_doithicong
+│   └── Cau4_Lab2.sql                   # Câu 4: Cập nhật dữ liệu
+└── Lab3/          # Lab 3 – SQL: Truy vấn dữ liệu
+    ├── BTTL.sql                        # Bài tập ở lớp (câu 1–17, csdl_congty)
+    └── Lab3_csdl_xebuyt.sql            # Bài tập về nhà (câu 1–12, csdl_xebuyt)
 ```
 
 ---
