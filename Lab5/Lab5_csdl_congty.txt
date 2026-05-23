@@ -1,0 +1,163 @@
+================================================================================
+LAB 05 — ĐẠI SỐ QUAN HỆ — CƠ SỞ DỮ LIỆU DỰ ÁN CÔNG TY (csdl_congty)
+================================================================================
+* Hướng dẫn cú pháp RelaX:
+  - Chọn (Selection): σ dieu_kien (QuanHe)
+  - Chiếu (Projection): π danh_sach_thuoc_tinh (QuanHe)
+  - Đổi tên (Rename): ρ TenMoi (QuanHe) hoặc ρ attr_moi -> attr_cu (QuanHe)
+  - Kết tự nhiên: QuanHe1 ⨝ QuanHe2
+  - Kết theta: QuanHe1 ⨝ dieu_kien QuanHe2
+  - Kết ngoài trái: QuanHe1 ⟕ dieu_kien QuanHe2 hoặc QuanHe1 ⟕ QuanHe2
+  - Gom nhóm & Tính toán (Aggregation): γ thuoc_tinh_nhom; ham_tinh(thuoc_tinh) -> ten_moi (QuanHe)
+  - Phép chia quan hệ (Division): QuanHe1 ÷ QuanHe2
+
+--------------------------------------------------------------------------------
+TRUY VẤN CHỌN VÀ KẾT (CÂU 1 - 17)
+--------------------------------------------------------------------------------
+
+-- Câu 1: Cho biết mã số, họ tên, ngày sinh của các nhân viên phòng số 4.
+π manv, honv, dem, tennv, ngaysinh (σ mapb = 4 (nhanvien))
+
+-- Câu 2: Tìm những nhân viên có mức lương trên 30,000.
+σ luong > 30000 (nhanvien)
+
+-- Câu 3: Tìm những nhân viên có mức lương trên 25,000 ở phòng số 4 hoặc có mức lương trên 30,000 ở phòng số 5.
+σ (luong > 25000 ∧ mapb = 4) ∨ (luong > 30000 ∧ mapb = 5) (nhanvien)
+
+-- Câu 4: Cho biết họ tên, ngày sinh, địa chỉ của các nhân viên ở TpHCM.
+π honv, dem, tennv, ngaysinh, diachi (σ diachi like '%TpHCM' (nhanvien))
+
+-- Câu 5: Cho biết ngày sinh, địa chỉ của nhân viên có tên là “Nguyen Bao Hung”.
+π ngaysinh, diachi (σ honv = 'Nguyen' ∧ dem = 'Bao' ∧ tennv = 'Hung' (nhanvien))
+
+-- Câu 6: Tìm những nhân viên có địa chỉ thuộc quận “Phu Nhuan”.
+σ diachi like '%Phu Nhuan%' (nhanvien)
+
+-- Câu 7: Tìm những nhân viên sinh vào thập niên 1950.
+σ ngaysinh >= '1950-01-01' ∧ ngaysinh <= '1959-12-31' (nhanvien)
+
+-- Câu 8: Cho biết các mức lương riêng biệt của các nhân viên.
+π luong (nhanvien)
+
+-- Câu 9: Tìm những nhân viên không có người giám sát.
+σ mags = null (nhanvien)
+
+-- Câu 10: Với mỗi phòng ban, cho biết tên phòng ban và trụ sở của phòng.
+π tenpb, truso (phongban ⨝ truso_phong)
+
+-- Câu 11: Với mỗi phòng ban, cho biết tên phòng ban và tên người trưởng phòng.
+π tenpb, tennv (phongban ⨝ maql = manv nhanvien)
+
+-- Câu 12: Với mỗi nữ nhân viên, cho biết họ tên và tên người thân của nhân viên đó.
+π honv, dem, tennv, tentn (σ gioitinh = 'F' (nhanvien) ⨝ thannhan)
+
+-- Câu 13: Tìm tên và địa chỉ của các nhân viên làm việc trong phòng “Nghien cuu”.
+π honv, dem, tennv, diachi (nhanvien ⨝ (σ tenpb = 'Nghien cuu' (phongban)))
+
+-- Câu 14: Cho biết mã dự án, tên phòng điều phối và họ tên, địa chỉ, ngày sinh của người trưởng phòng điều phối của các dự án có địa điểm là “Go Vap”.
+π mada, tenpb, honv, dem, tennv, diachi, ngaysinh ( (σ diadiem = 'Go Vap' (duan)) ⨝ phongban ⨝ maql = manv nhanvien )
+
+-- Câu 15: Với mỗi nhân viên, cho biết họ tên của nhân viên và họ tên của người giám sát nhân viên đó.
+NV = ρ nv (π manv, honv, dem, tennv, mags (nhanvien))
+GS = ρ gs (π manv -> gs_manv, honv -> gs_honv, dem -> gs_dem, tennv -> gs_tennv (nhanvien))
+Result = π nv.honv, nv.dem, nv.tennv, gs.gs_honv, gs.gs_dem, gs.gs_tennv (NV ⨝ NV.mags = GS.gs_manv GS)
+
+-- Câu 16: Cho biết kết quả lương mới của các nhân viên tham gia dự án “San pham X” nếu như họ được tăng thêm 10% lương.
+π honv, dem, tennv, luong, luong * 1.1 -> luong_moi ( (σ tenda = 'San pham X' (duan)) ⨝ thamgia ⨝ nhanvien )
+
+-- Câu 17: Cho biết họ tên của nhân viên có người thân cùng tên và cùng giới tính với nhân viên đó.
+π honv, dem, tennv (nhanvien ⨝ nhanvien.manv = thannhan.manv ∧ nhanvien.tennv = thannhan.tentn ∧ nhanvien.gioitinh = thannhan.gioitinh thannhan)
+
+
+--------------------------------------------------------------------------------
+GOM NHÓM, SẮP XẾP, KẾT NGOÀI (CÂU 18 - 28)
+--------------------------------------------------------------------------------
+
+-- Câu 18: Cho biết họ tên, mã phòng làm việc của các nhân viên và mã số các dự án mà họ tham gia, sắp xếp tăng dần theo mã phòng, trong mỗi phòng sắp xếp theo họ, tên với thứ tự alphabe.
+τ mapb ASC, honv ASC, tennv ASC ( π honv, dem, tennv, mapb, mada (nhanvien ⟕ thamgia) )
+
+-- Câu 19: Cho biết tổng số nhân viên, mức lương cao nhất, mức lương thấp nhất và mức lương trung bình của phòng “Nghien cuu”.
+γ count(manv) -> tong_nv, max(luong) -> max_luong, min(luong) -> min_luong, avg(luong) -> tb_luong ( nhanvien ⨝ (σ tenpb = 'Nghien cuu' (phongban)) )
+
+-- Câu 20: Với mỗi phòng, cho biết mã số phòng và tổng số nhân viên của phòng đó.
+γ mapb; count(manv) -> tong_nv (phongban ⟕ nhanvien)
+
+-- Câu 21: Với mỗi phòng, cho biết mã số phòng và mức lương trung bình của các nhân viên của phòng đó.
+γ mapb; avg(luong) -> tb_luong (phongban ⟕ nhanvien)
+
+-- Câu 22: Với mỗi dự án có nhân viên tham gia, cho biết mã số, tên và tổng số nhân viên tham gia của dự án đó.
+γ mada, tenda; count(manv) -> tong_nv (duan ⨝ thamgia)
+
+-- Câu 23: Cho biết mã số, tên và tổng số nhân viên tham gia của dự án có nhiều hơn 2 nhân viên tham gia.
+σ tong_nv > 2 ( γ mada, tenda; count(manv) -> tong_nv (duan ⨝ thamgia) )
+
+-- Câu 24: Cho biết mã số, tên và tổng số nhân viên của các phòng có nhiều hơn 5 nhân viên.
+σ tong_nv > 5 ( γ mapb, tenpb; count(manv) -> tong_nv (phongban ⨝ nhanvien) )
+
+-- Câu 25: Với mỗi dự án, cho biết mã số, tên và tổng số nhân viên tham gia của dự án đó.
+γ mada, tenda; count(manv) -> tong_nv (duan ⟕ thamgia)
+
+-- Câu 26: Với mỗi dự án, cho biết mã số, tên và tổng số nhân viên thuộc phòng số 5 tham gia của dự án đó.
+NhanVienP5 = ρ nv_p5 -> manv (π manv (σ mapb = 5 (nhanvien)))
+ThamGiaP5 = NhanVienP5 ⨝ thamgia
+Result = γ mada, tenda; count(nv_p5) -> tong_nv_p5 ( duan ⟕ ThamGiaP5 )
+
+-- Câu 27: Với mỗi nhân viên, cho biết họ tên và tổng số người thân của nhân viên đó.
+γ manv, honv, dem, tennv; count(tentn) -> tong_tn (nhanvien ⟕ thannhan)
+
+-- Câu 28: Với mỗi phòng có mức lương trung bình lớn hơn 30,000, cho biết tên phòng và tổng số nhân viên của phòng đó.
+Result = π tenpb, tong_nv ( σ tb_luong > 30000 ( γ mapb, tenpb; avg(luong) -> tb_luong, count(manv) -> tong_nv (phongban ⨝ nhanvien) ) )
+
+
+--------------------------------------------------------------------------------
+TRUY VẤN LỒNG PHỨC TẠP (CÂU 29 - 38)
+--------------------------------------------------------------------------------
+
+-- Câu 29: Cho biết tên các dự án có nhân viên tham gia mang họ “Nguyen” hoặc người trưởng phòng điều phối mang họ “Nguyen”.
+Proj_NV = π tenda ( (σ honv = 'Nguyen' (nhanvien) ⨝ thamgia ⨝ duan) )
+Proj_TP = π tenda ( (σ honv = 'Nguyen' (nhanvien) ⨝ maql = manv (phongban ⨝ duan)) )
+Result = Proj_NV ∪ Proj_TP
+
+-- Câu 30: Với mỗi phòng có mức lương trung bình lớn hơn 30,000, cho biết tên phòng và tổng số nhân viên nữ của phòng đó.
+RoomAvg = σ tb_luong > 30000 ( γ mapb, tenpb; avg(luong) -> tb_luong (phongban ⨝ nhanvien) )
+FemaleCount = γ mapb; count(manv) -> tong_nv_nu ( σ gioitinh = 'F' (nhanvien) )
+Result = π tenpb, tong_nv_nu (RoomAvg ⟕ FemaleCount)
+
+-- Câu 31: Cho biết họ tên các nhân viên có trên 2 người thân.
+ThanNhanGT2 = σ tong_tn > 2 (γ manv; count(tentn) -> tong_tn (thannhan))
+Result = π honv, dem, tennv ( nhanvien ⨝ ThanNhanGT2 )
+
+-- Câu 32: Cho biết họ tên các nhân viên không có người thân nào.
+NVDepend = π manv (nhanvien ⨝ thannhan)
+NVNoDepend = π manv (nhanvien) - NVDepend
+Result = π honv, dem, tennv ( nhanvien ⨝ NVNoDepend )
+
+-- Câu 33: Cho biết họ tên các trưởng phòng có ít nhất một người thân.
+TruongPhong = π maql (phongban)
+TP_CoThanNhan = TruongPhong ⨝ maql = manv thannhan
+Result = π honv, dem, tennv ( nhanvien ⨝ manv = maql TP_CoThanNhan )
+
+-- Câu 34: Cho biết họ tên các nhân viên có mức lương trên mức lương trung bình của phòng “Nghien cuu”.
+AvgNC = γ avg(luong) -> tb_luong (nhanvien ⨝ (σ tenpb = 'Nghien cuu' (phongban)))
+Result = π honv, dem, tennv ( nhanvien ⨝ luong > tb_luong AvgNC )
+
+-- Câu 35: Cho biết tên phòng và họ tên trưởng phòng của phòng có đông nhân viên nhất.
+RoomCounts = γ mapb, tenpb, maql; count(manv) -> tong_nv (phongban ⨝ nhanvien)
+MaxCount = γ max(tong_nv) -> max_nv (RoomCounts)
+Result = π tenpb, honv, dem, tennv ( (RoomCounts ⨝ tong_nv = max_nv MaxCount) ⨝ maql = manv nhanvien )
+
+-- Câu 36: Cho biết họ tên và địa chỉ các nhân viên làm việc cho một dự án ở “Phu Nhuan” nhưng phòng mà họ làm việc lại không có trụ sở ở “Phu Nhuan”.
+NV_PN_Proj = π manv, honv, dem, tennv, diachi, mapb (nhanvien ⨝ thamgia ⨝ (σ diadiem = 'Phu Nhuan' (duan)))
+PB_PN_Loc = π mapb (σ truso = 'Phu Nhuan' (truso_phong))
+Result = π honv, dem, tennv, diachi ( NV_PN_Proj - (NV_PN_Proj ⨝ mapb = mapb PB_PN_Loc) )
+
+-- Câu 37: Cho biết họ tên các nhân viên tham gia tất cả các dự án công ty.
+-- Sử dụng phép chia quan hệ (Relational Division)
+DivResult = (π manv, mada (thamgia)) ÷ (π mada (duan))
+Result = π honv, dem, tennv (nhanvien ⨝ DivResult)
+
+-- Câu 38: Cho biết họ tên các nhân viên tham gia tất cả các dự án do phòng số 5 điều phối.
+-- Sử dụng phép chia quan hệ với tập hợp dự án của phòng số 5
+ProjP5 = π mada (σ mapb = 5 (duan))
+DivResult = (π manv, mada (thamgia)) ÷ ProjP5
+Result = π honv, dem, tennv (nhanvien ⨝ DivResult)

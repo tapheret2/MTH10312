@@ -1,0 +1,110 @@
+================================================================================
+LAB 05 — ĐẠI SỐ QUAN HỆ — CƠ SỞ DỮ LIỆU XE BUÝT (csdl_xebuyt)
+================================================================================
+* Hướng dẫn cú pháp RelaX:
+  - Chọn (Selection): σ dieu_kien (QuanHe)
+  - Chiếu (Projection): π danh_sach_thuoc_tinh (QuanHe)
+  - Đổi tên (Rename): ρ TenMoi (QuanHe) hoặc ρ attr_moi -> attr_cu (QuanHe)
+  - Kết tự nhiên: QuanHe1 ⨝ QuanHe2
+  - Kết theta: QuanHe1 ⨝ dieu_kien QuanHe2
+  - Kết ngoài trái: QuanHe1 ⟕ dieu_kien QuanHe2 hoặc QuanHe1 ⟕ QuanHe2
+  - Gom nhóm & Tính toán (Aggregation): γ thuoc_tinh_nhom; ham_tinh(thuoc_tinh) -> ten_moi (QuanHe)
+  - Phép chia quan hệ (Division): QuanHe1 ÷ QuanHe2
+
+--------------------------------------------------------------------------------
+BIỂU THỨC ĐẠI SỐ QUAN HỆ CHO CÁC CÂU TRUY VẤN LAB 3 (CÂU 1 - 12)
+--------------------------------------------------------------------------------
+
+-- Câu 1: Cho biết mã số tuyến, tên tuyến, cự ly, tên đơn vị vận hành của các tuyến xe buýt có cự ly lớn hơn 20,000m.
+π matb, tentuyen, culy, tendonvi ( (σ culy > 20000 (tuyenbuyt)) ⨝ dvvanhanh )
+
+-- Câu 2: Với mỗi trạm dừng ở đường Hàm Nghi, Quận 1, cho biết mã số trạm, tên trạm và mã số các tuyến xe buýt có lộ trình qua trạm đó.
+π matd, tentram, matb ( (σ diadiem like '%Ham Nghi%' ∧ diadiem like '%Quan 1%' (tramdung)) ⨝ lotrinh )
+
+-- Câu 3: Cho biết mã số trạm, tên trạm, loại của các trạm dừng ở Quận 12 thuộc lộ trình của các tuyến xe buýt số 3.
+π matd, tentram, loai ( (σ diadiem like '%Quan 12%' (tramdung)) ⨝ lotrinh ⨝ (σ matb = 3 (tuyenbuyt)) )
+
+-- Câu 4: Cho biết mã số trạm, tên trạm, loại của các trạm dừng khởi hành của các tuyến xe buýt.
+-- (Trạm khởi hành tương ứng với thứ tự trạm = 1 trong lộ trình)
+π matd, tentram, loai ( (σ thututram = 1 (lotrinh)) ⨝ tramdung )
+
+-- Câu 5: Cho biết mã số tuyến, tên tuyến của các tuyến xe buýt có lộ trình đi qua trạm dừng có tên là Chợ Cũ ở Quận 1.
+π matb, tentuyen ( tuyenbuyt ⨝ lotrinh ⨝ (σ tentram = 'CHO CU' ∧ diadiem like '%Quan 1%' (tramdung)) )
+
+-- Câu 6: Cho biết tên đơn vị vận hành có tuyến xe buýt có lộ trình đi qua trạm dừng có mã số 53.
+π tendonvi ( dvvanhanh ⨝ tuyenbuyt ⨝ lotrinh ⨝ (σ matd = 53 (tramdung)) )
+
+-- Câu 7: Với các tuyến buýt có số chuyến trong ngày nhỏ hơn 250, cho biết mã số, tên tuyến, cự ly và tên trạm dừng khởi hành.
+TuyenStart = (σ thututram = 1 (lotrinh)) ⨝ tramdung
+Result = π matb, tentuyen, culy, tentram ( (σ sochuyen < 250 (tuyenbuyt)) ⨝ TuyenStart )
+
+-- Câu 8: Cho biết mã số tuyến, tên tuyến của các tuyến xe buýt có lộ trình đi qua trạm dừng là bến xe trên đường Phạm Ngũ Lão ở Quận 1.
+π matb, tentuyen ( tuyenbuyt ⨝ lotrinh ⨝ (σ loai = 'BEN XE' ∧ diadiem like '%Pham Ngu Lao%' ∧ diadiem like '%Quan 1%' (tramdung)) )
+
+-- Câu 9: Với các tuyến xe buýt do đơn vị HTX Vận tải 19/5 vận hành, cho biết mã số tuyến, tên tuyến, cự ly và lộ trình. Sắp xếp theo mã số tuyến và số thứ tự trạm.
+HTX = σ tendonvi = 'HTX VAN TAI 19/5' (dvvanhanh)
+Result = τ matb ASC, thututram ASC ( π matb, tentuyen, culy, thututram, matd (HTX ⨝ tuyenbuyt ⨝ lotrinh) )
+
+-- Câu 10: Cho biết mã số tuyến, tên tuyến của các tuyến xe buýt có lộ trình đi qua trạm dừng có tên là Đền Thờ Ấn Giáo, Pasteur. Sắp xếp theo mã số tuyến.
+Result = τ matb ASC ( π matb, tentuyen ( tuyenbuyt ⨝ lotrinh ⨝ (σ tentram like '%DEN THO AN GIAO%' (tramdung)) ) )
+
+-- Câu 11: Với các trạm dừng ở Quận 1, cho biết mã số trạm, tên trạm, địa điểm, và mã số các tuyến xe buýt có lộ trình đi qua trạm đó. Sắp xếp theo tên trạm và mã số tuyến.
+Result = τ tentram ASC, matb ASC ( π matd, tentram, diadiem, matb ( (σ diadiem like '%Quan 1%' (tramdung)) ⨝ lotrinh ) )
+
+-- Câu 12: Với mỗi đơn vị vận hành cho biết tên đơn vị và mã số tuyến, cự ly của các tuyến xe buýt có lộ trình đi qua trạm dừng số 36. Sắp xếp theo tên đơn vị vận hành và mã số tuyến.
+Result = τ tendonvi ASC, matb ASC ( π tendonvi, matb, culy ( dvvanhanh ⨝ tuyenbuyt ⨝ lotrinh ⨝ (σ matd = 36 (tramdung)) ) )
+
+
+--------------------------------------------------------------------------------
+BIỂU THỨC ĐẠI SỐ QUAN HỆ CHO CÁC CÂU TRUY VẤN LAB 4 (CÂU 13 - 24)
+--------------------------------------------------------------------------------
+
+-- Câu 13: Với các đơn vị vận hành có tổng số tuyến xe buýt mà đơn vị đảm nhận nhỏ hơn 2, cho biết tên đơn vị và tổng số tuyến xe buýt tương ứng.
+-- Sử dụng kết ngoài trái để hiển thị cả những đơn vị đảm nhận 0 tuyến.
+Result = σ tong_tuyen < 2 ( γ madv, tendonvi; count(matb) -> tong_tuyen (dvvanhanh ⟕ tuyenbuyt) )
+
+-- Câu 14: Với các tuyến xe buýt có lộ trình có số trạm dừng nhỏ hơn 40, cho biết mã số, tên tuyến, cự ly và tổng số trạm dừng tương ứng.
+Result = σ tong_tram < 40 ( γ matb, tentuyen, culy; count(matd) -> tong_tram (tuyenbuyt ⟕ lotrinh) )
+
+-- Câu 15: Với các trạm dừng có nhiều hơn 1 tuyến xe buýt có lộ trình đi qua, cho biết mã số, tên trạm và tổng số tuyến xe buýt có lộ trình đi qua trạm.
+Result = σ tong_tuyen > 1 ( γ matd, tentram; count(matb) -> tong_tuyen (tramdung ⨝ lotrinh) )
+
+-- Câu 16: Với mỗi trạm dừng, cho biết mã số trạm và tổng số tuyến buýt có lộ trình đi qua trạm đó.
+γ matd; count(matb) -> tong_tuyen (tramdung ⟕ lotrinh)
+
+-- Câu 17: Với mỗi lộ trình, cho biết mã số tuyến, loại trạm dừng và tổng số trạm dừng thuộc loại đó.
+γ matb, loai; count(matd) -> tong_tram (lotrinh ⨝ tramdung)
+
+-- Câu 18: Với mỗi lộ trình, cho biết mã số tuyến và tổng số trạm dừng thuộc loại Nhà chờ.
+Result = γ matb; count(matd) -> tong_tram_nha_cho (tuyenbuyt ⟕ (lotrinh ⨝ (σ loai = 'NHA CHO' (tramdung))))
+
+-- Câu 19: Cho biết các tuyến buýt có cự ly dài nhất.
+MaxCuly = γ max(culy) -> max_culy (tuyenbuyt)
+Result = π matb, tentuyen, culy (tuyenbuyt ⨝ culy = max_culy MaxCuly)
+
+-- Câu 20: Cho biết các trạm dừng có nhiều tuyến buýt đi qua nhất.
+SoTuyenQuaTram = γ matd, tentram; count(matb) -> so_tuyen (tramdung ⨝ lotrinh)
+MaxTuyen = γ max(so_tuyen) -> max_tuyen (SoTuyenQuaTram)
+Result = π matd, tentram, so_tuyen (SoTuyenQuaTram ⨝ so_tuyen = max_tuyen MaxTuyen)
+
+-- Câu 21: Cho biết mã số, tên tuyến của tuyến xe buýt có lộ trình nhiều trạm dừng nhất.
+SoTramTuyen = γ matb, tentuyen; count(matd) -> so_tram (tuyenbuyt ⨝ lotrinh)
+MaxTram = γ max(so_tram) -> max_tram (SoTramTuyen)
+Result = π matb, tentuyen, so_tram (SoTramTuyen ⨝ so_tram = max_tram MaxTram)
+
+-- Câu 22: Cho biết mã số, tên đơn vị của đơn vị vận hành đảm nhận nhiều tuyến xe buýt nhất.
+SoTuyenDV = γ madv, tendonvi; count(matb) -> so_tuyen (dvvanhanh ⨝ tuyenbuyt)
+MaxTuyen = γ max(so_tuyen) -> max_tuyen (SoTuyenDV)
+Result = π madv, tendonvi, so_tuyen (SoTuyenDV ⨝ so_tuyen = max_tuyen MaxTuyen)
+
+-- Câu 23: Cho biết các tuyến xe buýt có lộ trình đi qua cả hai trạm dừng có tên là TDH xe buýt Sài Gòn và Công viên 30/4.
+-- Sử dụng phép giao tập hợp (Intersection)
+TuyenSG = π matb (lotrinh ⨝ (σ tentram = 'TDH XE BUYT SAI GON' (tramdung)))
+TuyenCV = π matb (lotrinh ⨝ (σ tentram = 'CONG VIEN 30/4' (tramdung)))
+Result = π matb, tentuyen (tuyenbuyt ⨝ (TuyenSG ∩ TuyenCV))
+
+-- Câu 24: Cho biết các tuyến xe buýt có lộ trình đi qua tất cả các trạm dừng có mã số 31, 35, 81.
+-- Sử dụng phép chia quan hệ (Relational Division)
+TargetTram = ρ matd (π matd (σ matd = 31 (tramdung)) ∪ π matd (σ matd = 35 (tramdung)) ∪ π matd (σ matd = 81 (tramdung)))
+DivResult = (π matb, matd (lotrinh)) ÷ TargetTram
+Result = π matb, tentuyen (tuyenbuyt ⨝ DivResult)

@@ -44,7 +44,7 @@ LEFT JOIN lotrinh lt ON tb.matb = lt.matb
 LEFT JOIN tramdung td ON lt.matd = td.matd AND td.loai LIKE 'NHA CHO'
 GROUP BY tb.matb;
 
--- 19
+-- 19               
 USE csdl_xebuyt;
 SELECT matb, tentuyen, culy
 FROM tuyenbuyt
