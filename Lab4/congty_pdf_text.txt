@@ -1,0 +1,414 @@
+ 
+1
+Cơ sở dữ liệu - Dự án công ty 
+ 
+Lược đồ cơ sở dữ liệu: 
+ 
+ 
+ 
+2
+Mô tả các thuộc tính: 
+ 
+Thuộc tính 
+Ý nghĩa 
+Kiểu / Miền giá trị 
+MaNV, MaGS, MaQL
+Mã số của nhân viên
+char(9)
+HoNV
+Họ của nhân viên
+varchar(15)
+Dem
+Tên đệm của nhân viên
+varchar(15)
+TenNV
+Tên của nhân viên
+varchar(15)
+NgaySinh 
+Ngày sinh của nhân viên hoặc 
+thân nhân của nhân viên
+date 
+DiaChi
+Địa chỉ của nhân viên
+varchar(50)
+GioiTinh 
+Giới tính của nhân viên hoặc 
+của thân nhân của nhân viên
+{‘m’, ‘M’, ‘f’, ‘F’} 
+Luong
+Mức lương của nhân viên
+int
+MaPB
+Mã số của phòng ban
+int
+TenPB
+Tên của phòng ban
+varchar(30)
+NgayBoNhiem 
+Ngày nhận chức của người 
+trưởng phòng
+date 
+TruSo 
+Địa điểm đặt trụ sở của phòng 
+ban
+varchar(50) 
+MaDA
+Mã số của dự án
+int
+TenDA
+Tên của dự án
+varchar(30)
+DiaDiem
+Địa điểm triển khai dựán
+varchar(50)
+SoGio 
+Số giờ mà một nhân viên 
+tham gia vào dự án trong một 
+tuần
+decimal(6,1) 
+TenTN
+Tên của thân nhân
+varchar(45)
+QuanHe 
+Mối quan hệ giữa nhân viên 
+và thân nhân
+varchar(10) 
+ 
+ 
+ 
+3
+Thể hiện cơ sở dữ liệu: 
+ 
+NHANVIEN 
+MaNV 
+HoNV 
+Dem 
+TenNV 
+NgaySinh 
+DiaChi 
+Gioi
+Tinh 
+Luong 
+MaGS 
+MaPB 
+123456789
+Nguyen 
+Bao 
+Hung 
+09/01/1965
+73 Phan Dang Luu, 
+Phu Nhuan, TpHCM
+M 
+30000
+333445555
+5
+333445555
+Phan 
+Van 
+Nghia 
+08/12/1955
+63 Tran Huy Lieu, Phu 
+Nhuan, TpHCM
+M 
+40000
+888665555
+5
+999887777
+Au 
+ 
+Vuong 
+19/01/1968
+32 Cao Ba Nha, Q1, 
+TpHCM
+F 
+25000
+987654321
+4
+987654321
+Du 
+Thi 
+Hau 
+20/06/1941
+29 Bach Dang, Tan 
+Binh, TpHCM
+F 
+43000
+888665555
+4
+666884444
+Tran 
+ 
+Nam 
+15/09/1962
+97 Dien Bien Phu, 
+Binh Thanh, TpHCM
+M 
+38000
+333445555
+5
+453453453
+Hoang 
+Kim 
+Yen 
+31/07/1972
+56 Thich Quang Duc, 
+Phu Nhuan, TpHCM
+F 
+25000
+333445555
+5
+987987987
+Nguyen 
+Van 
+Giap 
+29/03/1969
+98 Huynh Van Banh, 
+Phu Nhuan, TpHCM
+M 
+25000
+987654321
+4
+888665555
+Le 
+Van 
+Bo 
+10/11/1937
+45 Ho Van Hue, Phu 
+Nhuan, TpHCM
+M 
+55000
+null
+1
+ 
+PHONGBAN 
+MaPB
+TenPB 
+MaQL 
+NgayBoNhiem 
+5
+Nghien cuu
+333445555
+22/06/1988
+4
+Hanh chinh
+987654321
+01/01/1995
+1
+Giam doc
+888665555
+19/06/1981
+TRUSO_PHONG 
+MaPB 
+TruSo 
+1
+Phu Nhuan
+4
+Go Vap
+5
+Tan Binh
+5
+Phu Nhuan
+5
+Thu Duc
+ 
+4
+ 
+ 
+DUAN 
+MaDA 
+TenDA 
+DiaDiem 
+MaPB 
+1
+San pham X
+Tan Binh
+5
+2
+San pham Y
+Thu Duc
+5
+3
+San pham Z
+Phu Nhuan
+5
+10
+Tin hoc hoa
+Go Vap
+4
+20
+Tai to chuc
+Phu Nhuan
+1
+30
+Phuc loi
+Go Vap
+4
+THANNHAN 
+MaNV 
+TenTN 
+GioiTinh 
+NgaySinh 
+QuanHe 
+333445555
+Anh
+F
+05/04/1986
+Con gai
+333445555
+The
+M
+25/10/1983
+Con trai
+333445555
+Loi
+F
+03/05/1958
+Vo
+987654321
+An
+M
+28/02/1942
+Chong
+123456789
+Minh
+M
+04/01/1988
+Con trai
+123456789
+Anh
+F
+30/12/1988
+Con gai
+123456789
+Yen
+F
+05/05/1967
+Vo
+THAMGIA 
+MaNV 
+MaDA
+SoGio 
+123456789
+1
+32.5
+123456789
+2
+7.5
+666884444
+3
+40.0
+453453453
+1
+20.0
+453453453
+2
+20.0
+333445555
+2
+10.0
+333445555
+3
+10.0
+333445555
+10
+10.0
+333445555
+20
+10.0
+999887777
+30
+30.0
+999887777
+10
+10.0
+987987987
+10
+35.0
+987987987
+30
+5.0
+987654321
+30
+20.0
+987654321
+20
+15.0
+888665555
+20
+null
+ 
+5
+I. 
+Viết các lệnh SQL định nghĩa dữ liệu để tạo cơ sở dữ liệu với các quan hệ và 
+ràng buộc khóa chính, khóa ngoại như  lược đồ trên với tên CsdlCongty. 
+II. 
+Viết các lệnh SQL cập nhật dữ liệu để tạo thể hiện của cơ sở dữ liệu như đã 
+cho. 
+III. Viết các lệnh SQL thực hiện các truy vấn dữ liệu sau: 
+ 
+Chọn và kết 
+1. Cho biết mã số, họ tên, ngày sinh của các nhân viên phòng số 4. 
+2. Tìm những nhân viên có mức lương trên 30,000. 
+3. Tìm những nhân viên có mức lương trên 25,000 ở phòng số 4 hoặc có mức 
+lương trên 30,000 ở phòng số 5. 
+4. Cho biết họ tên, ngày sinh, địa chỉ của các nhân viên ở TpHCM. 
+5. Cho biết ngày sinh, địa chỉ của nhân viên có tên là “Nguyen Bao Hung”. 
+6. Tìm những nhân viên có địa chỉ thuộc quận “Phu Nhuan”. 
+7. Tìm những nhân viên sinh vào thập niên 1950. 
+8. Cho biết các mức lương riêng biệt của các nhân viên. 
+9. Tìm những nhân viên không có người giám sát. 
+10. Với mỗi phòng ban, cho biết tên phòng ban và trụ sở của phòng. 
+11. Với mỗi phòng ban, cho biết tên phòng ban và tên người trưởng phòng. 
+12. Với mỗi nữ nhân viên, cho biết họ tên và tên người thân của nhân viên đó. 
+13. Tìm tên và địa chỉ của các nhân viên làm việc trong phòng “Nghien cuu”. 
+14. Cho biết mã dự án, tên phòng điều phối và họ tên, địa chỉ, ngày sinh của 
+người trưởng phòng điều phối của các dự án có địa điểm là “Go Vap”. 
+15. Với mỗi nhân viên, cho biết họ tên của nhân viên và họ tên của người giám 
+sát nhân viên đó. 
+16. Cho biết kết quả lương mới của các nhân viên tham gia dự án “San pham 
+X” nếu như họ được tăng thêm 10% lương. 
+17. Cho biết họ tên của nhân viên có người thân cùng tên và cùng giới tính với 
+nhân viên đó. 
+ 
+Gom nhóm, sắp xếp, kết ngoài 
+18. Cho biết họ tên, mã phòng làm việc của các nhân viên và mã số các dự án 
+mà họ tham gia, sắp xếp tăng dần theo mã phòng, trong mỗi phòng sắp xếp 
+theo họ, tên với thứ tự alphabe. 
+19. Cho biết tổng số nhân viên, mức lương cao nhất, mức lương thấp nhất và 
+mức lương trung bình của phòng “Nghien cuu”. 
+20. Với mỗi phòng, cho biết mã số phòng và tổng số nhân viên của phòng đó. 
+21. Với mỗi phòng, cho biết mã số phòng và mức lương trung bình của các 
+nhân viên của phòng đó. 
+22. Với mỗi dự án có nhân viên tham gia, cho biết mã số, tên và tổng số nhân 
+viên tham gia của dự án đó. 
+23. Cho biết mã số, tên và tổng số nhân viên tham gia của dự án có nhiều hơn 2 
+nhân viên tham gia. 
+ 
+6
+24. Cho biết mã số, tên và tổng số nhân viên của các phòng có nhiều hơn 5 
+nhân viên. 
+25. Với mỗi dự án, cho biết mã số, tên và tổng số nhân viên tham gia của dự án 
+đó. 
+26. Với mỗi dự án, cho biết mã số, tên và tổng số nhân viên thuộc phòng số 5 
+tham gia của dự án đó. 
+27. Với mỗi nhân viên, cho biết họ tên và tổng số người thân của nhân viên đó. 
+28. Với mỗi phòng có mức lương trung bình lớn hơn 30,000, cho biết tên 
+phòng và tổng số nhân viên của phòng đó. 
+ 
+Truy vấn lồng 
+29. Cho biết tên các dự án có nhân viên tham gia mang họ “Nguyen” hoặc 
+người trưởng phòng điều phối mang họ “Nguyen”. 
+30. Với mỗi phòng có mức lương trung bình lớn hơn 30,000, cho biết tên 
+phòng và tổng số nhân viên nữ của phòng đó. 
+31. Cho biết họ tên các nhân viên có trên 2 người thân. 
+32. Cho biết họ tên các nhân viên không có người thân nào. 
+33. Cho biết họ tên các trưởng phòng có ít nhất một người thân. 
+34. Cho biết họ tên các nhân viên có mức lương trên mức lương trung bình của 
+phòng “Nghien cuu”. 
+35. Cho biết tên phòng và họ tên trưởng phòng của phòng có đông nhân viên 
+nhất. 
+36. Cho biết họ tên và địa chỉ các nhân viên làm việc cho một dự án ở “Phu 
+Nhuan” nhưng phòng mà họ làm việc lại không có trụ sở ở “Phu Nhuan”. 
+37. Cho biết họ tên các nhân viên tham gia tất cả các dự án công ty. 
+38. Cho biết họ tên các nhân viên tham gia tất cả các dự án do phòng số 5 điều 
+phối. 
